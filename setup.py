@@ -10,7 +10,7 @@ with open(os.path.join(here, "README.rst"), encoding="utf-8") as f:
 
 setuptools.setup(
     name="argcomb",
-    version="0.2",
+    version="0.1",
     license="MIT",
     author="Jacob Unna",
     author_email="jacob.unna@gmail.com",
