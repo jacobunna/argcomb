@@ -4,8 +4,8 @@ ArgComb
 Validate argument combinations
 
 .. image:: https://readthedocs.org/projects/argcomb/badge/?version=latest
-:target: https://argcomb.readthedocs.io/en/latest/?badge=latest
-:alt: Documentation Status
+    :target: https://argcomb.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 Installation
 ------------
