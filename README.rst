@@ -14,12 +14,12 @@ Install with pip:
 
 .. code-block:: text
 
-    pip install argcomb
+    pip install arg-comb
 
 Links
 -----
 
 * Documentation: https://argcomb.readthedocs.io/
-* Releases: https://pypi.org/project/argcomb
+* Releases: https://pypi.org/project/arg-comb
 * Code: https://github.com/jacobunna/argcomb
 * Issue tracker: https://github.com/jacobunna/argcomb/issues

@@ -9,7 +9,7 @@ with open(os.path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
 setuptools.setup(
-    name="argcomb",
+    name="arg-comb",
     version="0.1",
     license="MIT",
     author="Jacob Unna",
