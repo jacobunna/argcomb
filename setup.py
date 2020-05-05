@@ -5,18 +5,18 @@ import os
 import setuptools
 
 here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, "README.md"), encoding="utf-8") as f:
+with open(os.path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
 setuptools.setup(
     name="argcomb",
-    version="0.1",
+    version="0.2",
     license="MIT",
     author="Jacob Unna",
     author_email="jacob.unna@gmail.com",
     description="Validate the argument combination passed to a function",
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url="https://github.com/jacobunna/argcomb",
     classifiers=[
         "Development Status :: 3 - Alpha",
