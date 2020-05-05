@@ -11,6 +11,16 @@ ArgComb Documentation
 .. automodule:: argcomb
    :noindex:
 
+Installation
+------------
+
+Install using pip:
+
+.. code-block:: text
+
+    pip install arg-comb
+
+
 Basic Usage
 -----------
 
@@ -48,7 +58,7 @@ A condition specified using :class:`Xor` is called a **derived condition**, sinc
 it is derived from one or more other conditions (in this case, it is derived from
 ``"frames"`` and ``"seconds"``).
 
-ArgComb provides four types of derived conditon:
+ArgComb provides four types of derived condition:
 
 :class:`And`
     Holds if all the conditions it is derived from hold. Takes any number of
@@ -109,7 +119,7 @@ Value Dependent Conditions
 
 Sometimes the value of an argument will dictate which other arguments can be
 passed. To take our previous example of trimming a video, suppose the function
-takes an additional parameter to explicitally state whether frames or seconds
+takes an additional parameter to explicitly state whether frames or seconds
 are going to be used::
 
     from enum import Enum

@@ -31,7 +31,7 @@ Why is there no ``Nand`` derived condition?
 It is considered that :class:`Or`, :class:`And`, :class:`Xor` and :class:`Not`
 will be the most useful derived conditions. Other conditions can be derived
 from these. If you feel strongly that another derived condition would
-add value, please raise a feature request.
+add value, please `open an issue`_.
 
 Does ArgComb correctly handle positional-only and keyword-only parameters?
 --------------------------------------------------------------------------
@@ -57,7 +57,7 @@ Why do you only support Python 3.8+?
 Since Python 3.8 introduced positional only arguments, the code for prior
 versions would require some simple yet non-trivial changes. As a first
 release of this module it only supports Python 3.8+, but if you would like
-it to support an earlier version please feel free to raise a feature request.
+it to support an earlier version please feel free to `open an issue`_.
 
 How does ArgComb handle ``*args`` and ``**kwargs``?
 ---------------------------------------------------
@@ -66,8 +66,8 @@ ArgComb requires arguments to have names in order to create conditions
 for them. Since ``*args`` only captures arguments by position, it is
 ignored by ArgComb.
 
-It does not matter whether an argument explicitally appears in the
-function signature or is implicitally accepted using ``**kwargs``.
+It does not matter whether an argument explicitly appears in the
+function signature or is implicitly accepted using ``**kwargs``.
 In both cases, ArgComb can be used. For example::
 
     from argcomb import argcomb
@@ -75,7 +75,7 @@ In both cases, ArgComb can be used. For example::
     @argcomb(a="b")
     def f(**kwargs): ...
 
-Neither ``a`` nor ``b`` are explicitally accepted as arguments by ``f``,
+Neither ``a`` nor ``b`` are explicitly accepted as arguments by ``f``,
 but if the caller supplies an argument called ``a`` then ArgComb will
 check that they also pass an argument ``b``.
 
@@ -86,7 +86,7 @@ Value dependent conditions are created using a dictionary where the
 keys are parameter values and the values are their respective
 conditions. Since dictionary keys must be hashable, this prevents
 value dependent validation from being carried out based on a
-non-hashable type such as a ``list``.
+unhashable type such as a ``list``.
 
 This is by design. It is intended that value dependent conditions will
 depend on simple indicator variables such as integers, booleans and
@@ -94,8 +94,7 @@ depend on simple indicator variables such as integers, booleans and
 between complex, mutable objects risks creating behaviour which is
 confusing to the caller.
 
-Nevertheless, if you have a compelling use case, feel free to raise a
-feature request.
+Nevertheless, if you have a compelling use case, feel free to `open an issue`_..
 
 Can't I achieve similar results using ``@typing.overload``?
 -----------------------------------------------------------
@@ -155,3 +154,5 @@ Instead of the :class:`Else` condition, can I raise an exception?
 
 This is not possible. Such validation is beyond the scope of ArgComb,
 which is focussed just on whether an argument is passed or not.
+
+.. _`open an issue`: https://github.com/jacobunna/argcomb/issues/new

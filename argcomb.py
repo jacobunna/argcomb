@@ -57,7 +57,7 @@ class DerivedCondition(abc.ABC):
     type_: ConditionType
 
     def __init__(self, *args: Condition):
-        """Construt a condition.
+        """Construct a condition.
 
         :param args: list of conditions nested under this condition
         """
@@ -235,7 +235,7 @@ class argcomb:
         ``True`` in order for the call to be considered valid.
     :param kwargs: for each keyword argument, the name is assumed to be
         the name of a variable that the caller may supply, and the
-        value determines any valiation actions that should take place
+        value determines any validation actions that should take place
         if that variable is passed by the caller to the decorated
         function.
     """
