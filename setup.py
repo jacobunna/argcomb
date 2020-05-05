@@ -11,12 +11,13 @@ with open(os.path.join(here, "README.md"), encoding="utf-8") as f:
 setuptools.setup(
     name="argcomb",
     version="0.1",
+    license="MIT",
+    author="Jacob Unna",
+    author_email="jacob.unna@gmail.com",
     description="Validate the argument combination passed to a function",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/jacobunna/argcomb",
-    author="Jacob Unna",
-    author_email="jacob.unna@gmail.com",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
@@ -28,5 +29,5 @@ setuptools.setup(
     keywords="argument parameter validation",
     py_modules=["argcomb"],
     python_requires=">=3.8",
-    extras_require={"test": ["pytest"]},
+    extras_require={"dev": ["pytest", "sphinx",]},
 )
