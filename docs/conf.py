@@ -5,6 +5,7 @@ from datetime import datetime
 project = "ArgComb"
 copyright = f"{datetime.now().year}, Jacob Unna"
 author = "Jacob Unna"
+master_doc = "index"
 release = "0.1"
 extensions = ["sphinx.ext.autodoc"]
 templates_path = ["_templates"]
