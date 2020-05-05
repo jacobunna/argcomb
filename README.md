@@ -1,2 +1,0 @@
-# argcomb
-Validate argument combinations
