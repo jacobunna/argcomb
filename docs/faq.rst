@@ -8,7 +8,7 @@ Doing additional runtime checks is slower than not doing them.
 Whether this overhead is unnecessary is up to the developer. To add
 checks to functions which aren't part of a public API would typically
 be poor practice since in a stable release the checks would execute but
-never fail. Yet adding checks to a public API may be helpful for your
+never fail. Yet adding checks to a public API may be helpful for its
 users.
 
 How does ArgComb deal with default values?
@@ -46,7 +46,7 @@ The only exception is when two parameters have the same name::
     def f(a=None, /, **kwargs): ...
 
 The caller could conceivably call ``f(1, a=2)``, giving two possible values
-for ``a``. In this case a warning is emitted. Validation will continue and
+for ``a``. In this case a ``UserWarning`` is emitted. Validation will continue and
 ``2`` will be taken as the value of ``a``, but it is not recommended to use
 ArgComb in this situation.
 
@@ -59,12 +59,38 @@ versions would require some simple yet non-trivial changes. As a first
 release of this module it only supports Python 3.8+, but if you would like
 it to support an earlier version please feel free to `open an issue`_.
 
-How does ArgComb handle ``*args`` and ``**kwargs``?
----------------------------------------------------
+How does ArgComb handle ``*args``?
+----------------------------------
 
 ArgComb requires arguments to have names in order to create conditions
 for them. Since ``*args`` only captures arguments by position, it is
 ignored by ArgComb.
+
+.. note::
+    ArgComb cannot, for example, check that the first positional argument is
+    supplied. ArgComb works only with arguments that have names.
+
+    This does not mean that ArgComb cannot handle arguments which
+    are supplied positionally, so long as the names for those
+    positional arguments can be inferred from the function
+    signature::
+
+        from argcomb import argcomb
+
+        @argcomb("a")
+        def f(a=None): ...
+
+        @argcomb("a")
+        def g(*args): ...
+
+    If we call ``f(1)`` then ArgComb will know that the ``1`` is called
+    ``a`` and validation will succeed.
+
+    However, if we call ``g(1)`` then of course ``1`` has no name
+    and validation will fail.
+
+How does ArgComb handle ``*kwargs``?
+-------------------------------------
 
 It does not matter whether an argument explicitly appears in the
 function signature or is implicitly accepted using ``**kwargs``.
@@ -82,6 +108,8 @@ check that they also pass an argument ``b``.
 How can I create a value dependent condition for an unhashable value?
 ---------------------------------------------------------------------
 
+Short answer: you can't.
+
 Value dependent conditions are created using a dictionary where the
 keys are parameter values and the values are their respective
 conditions. Since dictionary keys must be hashable, this prevents
@@ -96,58 +124,10 @@ confusing to the caller.
 
 Nevertheless, if you have a compelling use case, feel free to `open an issue`_..
 
-Can't I achieve similar results using ``@typing.overload``?
------------------------------------------------------------
-
-The biggest difference is that static type checking is static whereas
-ArgComb does validation at runtime. This means that whereas ArgComb
-should only be used for public APIs where runtime checking is
-desirable, ``typing`` can and should be applied to all parts of a
-codebase.
-
-In terms of functionality, there is overlap. For example, take the
-following::
-
-    from typing import Optional
-    from argcomb import argcomb
-
-    @argcomb(a={1: "b", 2: "c"})
-    def f(
-        a: Optional[int] = None,
-        b: Optional[int] = None,
-        c: Optional[int] = None
-    ): ...
-
-This is conceptually similar to::
-
-    from typing import overload, Literal, Optional
-
-    @overload
-    def f(a: Literal(1), b: int, c: None): ...
-
-    @overload
-    def f(a: Literal(2), b: None, c: int): ...
-
-    def f(
-        a: Optional[int] = None,
-        b: Optional[int] = None,
-        c: Optional[int] = None
-    ): ...
-
-It is usually possible to achieve similar behaviour to ArgComb using
-typing. However:
-
-* ArgComb is more compact—in the example above it is slightly more compact,
-  but for more complex conditions is can be vastly more compact, to the
-  point that using ``typing`` is impractical
-* ArgComb can be used even when the signature is generic i.e. uses
-  ``*args`` and/or ``**kwargs``
-* The behaviour of :class:`Else` cannot be achieved using ``typing``
-
 Can I validate the *type* of one parameter based on the value of another parameter?
 -----------------------------------------------------------------------------------
 
-This is not possible.
+ArgComb does not support this.
 
 Instead of the :class:`Else` condition, can I raise an exception?
 -----------------------------------------------------------------

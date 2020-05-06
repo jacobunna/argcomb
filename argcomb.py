@@ -1,16 +1,15 @@
 """ArgComb checks that the combination of arguments supplied for a
-function is valid. For example, suppose a function has the following
-signature::
+function is valid. Take the following function::
 
     def subseq(seq, start, length=None, end=None): ...
 
-This function returns a subsequence of ``seq`` starting at ``start``. The
+This returns a subsequence of ``seq`` starting at ``start``. The
 end can be specified by supplying either ``length`` or ``end``. The
 :func:`@argcomb<argcomb>` decorator checks that exactly one of these is supplied::
 
     from argcomb import argcomb, Xor
 
-    @argcomb(seq=Xor("length", "end"))
+    @argcomb(Xor("length", "end"))
     def subseq(seq, start, length=None, end=None): ...
 """
 

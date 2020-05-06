@@ -32,7 +32,7 @@ can assure that the caller supplies an argument::
     @argcomb("bar")
     def f(bar): ...
 
-If ``f`` is called but ``bar`` is not supplied, an
+If ``bar`` is not supplied, an
 :exc:`InvalidArgumentCombination` exception will be raised.
 
 This doesn't achieve much since in any event ``bar`` is a required argument: even
@@ -42,21 +42,19 @@ comes into its own when the check to be carried out is more subtle.
 Derived Conditions
 ------------------
 
-Suppose we have a function that trims some frames from the end of a video clip.
-How much to trim can be specified either by the number of frames or the duration
-in seconds::
+Recall this example from earlier::
 
     from argcomb import argcomb, Xor
 
-    @argcomb(Xor("frames", "seconds"))
-    def trim_video(file_name, frames=None, seconds=None): ...
+    @argcomb(Xor("length", "end"))
+    def subseq(seq, start, length=None, end=None): ...
 
 By passing an :class:`Xor` instance to :func:`@argcomb<argcomb>`, we check that
 exactly one of the conditions holds.
 
 A condition specified using :class:`Xor` is called a **derived condition**, since
 it is derived from one or more other conditions (in this case, it is derived from
-``"frames"`` and ``"seconds"``).
+``"length"`` and ``"end"``).
 
 ArgComb provides four types of derived condition:
 
@@ -73,7 +71,7 @@ ArgComb provides four types of derived condition:
     Holds if the condition it is derived from does not hold. Takes exactly one
     argument.
 
-Derived conditions can themselves contain other derived conditions::
+Derived conditions can themselves be derived from other derived conditions::
 
     from argcomb import argcomb, And, Xor
 
@@ -98,9 +96,11 @@ conditions that must be met *only if that parameter is supplied by the caller*::
     @argcomb(Or("a", "c"), a=Or("b", "c"), c="d")
     def f(a=None, b=None, c=None, d=None): ...
 
-In this example, we must pass at least one of ``a`` or ``c``. If ``a`` is supplied then either ``b``
-or ``c`` must also be supplied. If ``c`` is supplied then ``d`` must also be
-supplied.
+In this example, we must pass at least one of ``a`` or ``c`` due to the
+``Or("a", "c")``. If ``a`` is supplied then either ``b``
+or ``c`` must also be supplied, due to the ``a=Or("b", "c")``.
+If ``c`` is supplied then ``d`` must also be
+supplied, due to the ``c="d"``.
 
 Strictly speaking parameter dependencies are just a more convenient way of
 expressing complex derived conditions. For instance, the previous example
@@ -118,9 +118,11 @@ Value Dependent Conditions
 --------------------------
 
 Sometimes the value of an argument will dictate which other arguments can be
-passed. To take our previous example of trimming a video, suppose the function
-takes an additional parameter to explicitly state whether frames or seconds
-are going to be used::
+passed. In the following example, the function ``trim_video`` takes a video
+clip and removes some frames from the end. The number of frames can either be
+given explicitally, or the caller can specify the number of seconds they want
+to be removed. The caller must declare which method they will use with the
+``trim_type`` argument::
 
     from enum import Enum
     from argcomb import argcomb
@@ -129,13 +131,35 @@ are going to be used::
         FRAMES = 0
         SECONDS = 1
 
-    @argcomb(trim_type={TrimType.FRAMES: "frames", TrimType.SECONDS: "seconds"})
-    def trim_video(file_name, trim_type, frames=None, seconds=None): ...
+    @argcomb(trim_type={
+        TrimType.FRAMES: "frames",
+        TrimType.SECONDS: "seconds",
+    })
+    def trim_video(
+        file_name,
+        trim_type,
+        frames=None,
+        seconds=None,
+    ): ...
 
-Here, instead of giving a single condition for ``trim_type``,
+Instead of giving a single condition for ``trim_type``,
 we specify different conditions depending on the value that ``trim_type`` takes.
 We do this using a dictionary where the keys are the possible values for ``trim_type``
-and the values are the respective conditions.
+and the values are the respective conditions. If ``trim_type`` is ``TrimType.FRAMES``
+then the caller must supply the ``frames`` argument, and if it is ``TrimType.SECONDS``
+then the caller must supply the ``seconds`` argument.
+
+.. note::
+    While this example ensures that ``frames`` is passed when ``trim_type``
+    is ``TrimType.FRAMES``, it does not check that in this case ``seconds``
+    *isn't* passed. We could achieve this, and a similar check for
+    ``TrimType.SECONDS``,  with::
+
+        @argcomb(trim_type={
+            TrimType.FRAMES: And("frames", Not("seconds")),
+            TrimType.SECONDS: And("seconds", Not("frames")),
+        })
+
 
 If the value of the parameter does not match any of the dictionary keys, no validation
 takes place. This can be overridden using the special value :class:`Else` as a key::
