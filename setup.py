@@ -29,5 +29,5 @@ setuptools.setup(
     keywords="argument parameter validation",
     py_modules=["argcomb"],
     python_requires=">=3.8",
-    extras_require={"dev": ["pytest", "sphinx>=2",]},
+    extras_require={"dev": ["pytest", "sphinx>=3,<4",]},
 )
